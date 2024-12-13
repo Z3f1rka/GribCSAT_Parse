@@ -1,0 +1,6 @@
+[flake8]
+exclude = .git,__pycache__,.venv
+ignore = W191, E712
+max-line-length = 120
+indent-size = 4
+max-complexity = 12
