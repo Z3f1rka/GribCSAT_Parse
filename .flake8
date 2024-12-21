@@ -16,7 +16,7 @@ ignore =
 max-complexity = 10
 
 # Порядок импортов
-application-import-names = папки, где есть py файлы
+application-import-names = app
 import-order-style = google
 
 # Параметры других плагинов
