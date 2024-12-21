@@ -1,0 +1,4 @@
+#!/bin/sh
+
+set root_proj=../../.venv/Scripts/flake8.exe
+root_proj

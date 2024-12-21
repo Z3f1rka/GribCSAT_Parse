@@ -1,6 +1,28 @@
+# .flake8
 [flake8]
-exclude = .git,__pycache__,.venv
-ignore = W191, E712
 max-line-length = 120
-indent-size = 4
-max-complexity = 12
+exclude =
+    .git,
+    __pycache__,
+    build,
+    dist,
+    .venv
+ignore =
+    E203,
+    W503,
+    W191,
+    E712,
+    E122
+max-complexity = 10
+
+# Порядок импортов
+application-import-names = папки, где есть py файлы
+import-order-style = google
+
+# Параметры других плагинов
+# commas
+inline-quotes = '"'
+allow-multiline = true
+
+# print
+no-print = true
