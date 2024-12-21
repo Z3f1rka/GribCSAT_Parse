@@ -1,3 +1,4 @@
+@echo off
 SET venv=.venv\Scripts
 SET source=setup_scripts
 cd ..
