@@ -1,4 +1,7 @@
 #!/bin/sh
 
-set root_proj=../../.venv/Scripts/flake8.exe
-root_proj
+venv_path='.venv/Scripts'
+if $venv_path/flake8.exe
+then exit 0
+else exit 1
+fi
