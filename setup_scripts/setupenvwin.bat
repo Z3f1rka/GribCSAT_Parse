@@ -4,7 +4,7 @@ SET source=setup_scripts
 cd ..
 IF NOT EXIST ".venv" (
     python -m venv .venv
-    %venv%\pip.exe install -r requirements.txt
+    %venv%\pip.exe install -r requirements/dev.txt
 ) ELSE (
     ECHO 'Delete python venv for installing correctly'
 )
