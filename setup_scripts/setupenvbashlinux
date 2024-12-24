@@ -1,0 +1,23 @@
+#!/bin/sh
+
+cd ..
+if ls .venv > /dev/null 2> /dev/null
+then echo "Remove python venv for correct install"
+exit 1
+else python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements/dev.txt
+fi
+
+if ls .env > /dev/null 2> /dev/null
+then echo "" > /dev/null
+else if ls .env.template > /dev/null
+then cp .env.template .env > /dev/null
+fi
+fi
+
+if ls .git > /dev/null 2> /dev/null
+then cp setup_scripts/pre-commit .git/hooks/pre-commit
+else echo "clone repo from github"
+fi
+exit 0
