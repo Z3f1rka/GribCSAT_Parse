@@ -22,3 +22,6 @@ jobs:
       - name: Lint with Flake8
         run: |
           flake8 --verbose
+      - name: Test by pytest
+        run: |
+          pytest tests/
