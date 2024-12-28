@@ -1,0 +1,17 @@
+attrs==24.3.0
+colorama==0.4.6
+flake8==7.1.1
+flake8-absolute-import==1.0.0.2
+flake8-bugbear==24.12.12
+flake8-commas==4.0.0
+flake8-comments==0.1.2
+flake8-import-order==0.18.2
+flake8-print==5.0.0
+iniconfig==2.0.0
+mccabe==0.7.0
+packaging==24.2
+pluggy==1.5.0
+pycodestyle==2.12.1
+pyflakes==3.2.0
+pytest==8.3.4
+setuptools==75.6.0
