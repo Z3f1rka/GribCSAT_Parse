@@ -23,3 +23,4 @@ IF NOT EXIST ".git" (
 ) ELSE (
     COPY %source%\pre-commit .git\hooks\pre-commit
 )
+EXIT 0
