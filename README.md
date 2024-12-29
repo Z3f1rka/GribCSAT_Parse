@@ -1,9 +1,12 @@
 # GribCSAT_Parse
-## Настройка окружения для windows:
+## Настройка окружения для Windows:
 **Запускать команды через cmd.exe из папки проекта**
 ```shell
-cd setup_scripts
+start setup_scripts\win\setupenvwin.bat
 ```
-```shell
-setupenvwin.bat
+**setupenvwin.bat - исполняемый файл**
+## Настройка окружения для Linux:
+```bash
+bash setup_scripts/linux/setupenvbashlinux
 ```
+**setupenvbashlinux - скрипт**
