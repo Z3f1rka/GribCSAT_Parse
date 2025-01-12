@@ -60,8 +60,8 @@ class Driver:
                     [
                         i
                         for i in scroll_elements[element]
-                        .find_element(By.CLASS_NAME, rating)
-                        .find_elements(By.TAG_NAME, "svg")
+                    .find_element(By.CLASS_NAME, rating)
+                    .find_elements(By.TAG_NAME, "svg")
                         if i.get_attribute("style")[10] == "("
                     ],
                 )
@@ -119,7 +119,7 @@ class Driver:
                         break
             except Exception:
                 pass
-            self.card_info(read)
+            self.__card_info(read)
 
         elif address.split("/")[2] == "www.wildberries.ru":  # Подготовка для товара на wb
             date = "feedback__date"
@@ -132,7 +132,7 @@ class Driver:
 
             self.driver.get(address)
             WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "canvas")))
-            self.card_info(read)
+            self.__card_info(read)
             self.driver.execute_script("window.scrollBy(0, 1000);")
             WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, "comments__btn-all")))
             self.driver.find_element(By.CLASS_NAME, "comments__btn-all").click()
@@ -142,7 +142,7 @@ class Driver:
 
     def find_feedbacks(self, address: str, count: int = 0) -> dict:
         self.card["link"] = address
-        feedback, read, name, comment, read_completely, date, rating = self.check_link(address)
+        feedback, read, name, comment, read_completely, date, rating = self.__check_link(address)
         # Ожидание прогрузки начала страницы
         WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.TAG_NAME, "img")))
 
@@ -151,11 +151,11 @@ class Driver:
         WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.TAG_NAME, "footer")))
 
         # Scroll
-        self.scrolling(read, count, feedback)
+        self.__scrolling(read, count, feedback)
 
         try:
             if read:  # Кликаем по Читать полностью (есть только у ozon)
-                self.click_feedbacks(read_completely)
+                self.__click_feedbacks(read_completely)
 
             scroll_elements = [i for i in self.driver.find_elements(By.CLASS_NAME, feedback)]
             if count:
@@ -166,7 +166,7 @@ class Driver:
                     'arguments[0].scrollIntoView({block: "center", inline: "center"});',
                     scroll_elements[element],
                 )
-                rats = self.find_rating(read, scroll_elements, element, rating)
+                rats = self.__find_rating(read, scroll_elements, element, rating)
                 box[element] = (
                     scroll_elements[element].find_element(By.CLASS_NAME, name).text,
                     scroll_elements[element].find_element(By.CLASS_NAME, comment).text,
@@ -182,3 +182,9 @@ class Driver:
         data = json.dumps(self.card)
         data = json.loads(data)
         return data
+
+
+if __name__ == "__main__":
+    exemplar = Driver()
+    link = "https://www.ozon.ru/product/botinki-dr-martens-1460-pascal-black-virginia-1232861547/"
+    # print(exemplar.find_feedbacks(link))
