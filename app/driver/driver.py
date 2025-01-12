@@ -25,7 +25,7 @@ class Driver:
             fix_hairline=True,
         )
 
-    def click_feedbacks(self, read_completely):
+    def __click_feedbacks(self, read_completely: str) -> None:
         clickable_elements = [i for i in self.driver.find_elements(By.CLASS_NAME, read_completely)]
         for element in clickable_elements:
             self.driver.execute_script(
@@ -34,7 +34,7 @@ class Driver:
             )
             element.click()
 
-    def scrolling(self, read, count, feedback):
+    def __scrolling(self, read: bool, count: int, feedback: str) -> None:
         last_height = self.driver.execute_script("return document.body.scrollHeight")  # Размер страницы
         while True:
             self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
@@ -53,7 +53,7 @@ class Driver:
                 if len(count_scroll_elements) >= count:
                     break
 
-    def find_rating(self, n, scroll_elements, element, rating):
+    def __find_rating(self, n: bool, scroll_elements: list, element: int, rating: str) -> int:
         if n:
             return (
                 len(
@@ -68,7 +68,7 @@ class Driver:
             )
         return int(scroll_elements[element].find_element(By.CLASS_NAME, rating).get_attribute("class")[-1])
 
-    def card_info(self, n):
+    def __card_info(self, n: bool) -> None:
         if n:
             self.card["title"] = self.driver.find_elements(By.CLASS_NAME, "l4u_27")[-1].text
             self.card["type"] = self.driver.find_elements(By.CLASS_NAME, "sd1_10")[-2].text
@@ -97,7 +97,7 @@ class Driver:
                 text,
             ]
 
-    def check_link(self, address):
+    def __check_link(self, address: str):
         if address.split("/")[2] == "www.ozon.ru":  # Подготовка для товара на ozon
             feedback = "wp4_30"
             read_completely = "pw_30"
@@ -140,7 +140,7 @@ class Driver:
             time.sleep(0.02)
         return feedback, read, name, comment, read_completely, date, rating
 
-    def find_feedbacks(self, address: str, count: int = 0):
+    def find_feedbacks(self, address: str, count: int = 0) -> dict:
         self.card["link"] = address
         feedback, read, name, comment, read_completely, date, rating = self.check_link(address)
         # Ожидание прогрузки начала страницы
