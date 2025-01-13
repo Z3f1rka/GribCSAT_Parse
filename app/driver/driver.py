@@ -1,6 +1,7 @@
 import json
 import time
 
+from fake_useragent import UserAgent
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -10,13 +11,15 @@ import undetected_chromedriver as uc
 
 
 class Driver:
-    def __init__(self):
+    def __init__(self) -> None:
         options = webdriver.ChromeOptions()
         options.add_argument("--headless")
         self.card = {}
         self.driver = uc.Chrome(options=options)
+        self.__ua = UserAgent(browsers="Chrome", os="Windows", platforms="desktop")
         stealth(
             self.driver,
+            user_agent=self.__ua.chrome,
             languages=["ru-RU", "ru"],
             vendor="Google Inc.",
             platform="Win32",
@@ -55,16 +58,14 @@ class Driver:
 
     def __find_rating(self, n: bool, scroll_elements: list, element: int, rating: str) -> int:
         if n:
-            return (
-                len(
-                    [
-                        i
-                        for i in scroll_elements[element]
+            return len(
+                [
+                    i
+                    for i in scroll_elements[element]
                     .find_element(By.CLASS_NAME, rating)
                     .find_elements(By.TAG_NAME, "svg")
-                        if i.get_attribute("style")[10] == "("
-                    ],
-                )
+                    if i.get_attribute("style")[10] == "("
+                ],
             )
         return int(scroll_elements[element].find_element(By.CLASS_NAME, rating).get_attribute("class")[-1])
 
