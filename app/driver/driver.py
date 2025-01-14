@@ -14,7 +14,7 @@ class Driver:
     def __init__(self) -> None:
         options = webdriver.ChromeOptions()
         options.add_argument("--headless")
-        self.card = {}
+        self.card = {"file": []}
         self.driver = uc.Chrome(options=options)
         self.__ua = UserAgent(browsers="Chrome", os="Windows", platforms="desktop")
         stealth(
@@ -74,24 +74,34 @@ class Driver:
             self.card["title"] = self.driver.find_elements(By.CLASS_NAME, "l4u_27")[-1].text
             self.card["type"] = self.driver.find_elements(By.CLASS_NAME, "sd1_10")[-2].text
             self.card["article"] = self.driver.find_elements(By.CLASS_NAME, "ga121-a2")[3].text[9:]
-            self.card["file"] = [
+            WebDriverWait(self.driver, 2).until(EC.presence_of_element_located((By.TAG_NAME, "video-player")))
+            self.card["file"] = self.card["file"] + [
+                self.driver.find_elements(By.TAG_NAME, "video-player")[0].get_attribute("src"),
+            ]
+            self.card["file"] = self.card["file"] + [
                 i.find_element(By.TAG_NAME, "img").get_attribute("src")
                 for i in self.driver.find_elements(By.CLASS_NAME, "jy0_27")[2:]
             ]
-            shop = self.driver.find_elements(By.CLASS_NAME, "yj3_27")[2]
+            WebDriverWait(self.driver, 2).until(EC.presence_of_element_located((By.CLASS_NAME, "yj3_27")))
+            shop = self.driver.find_elements(By.CLASS_NAME, "yj3_27")[1]
             self.card["shop"] = [
                 shop.get_attribute("href"),
                 shop.get_attribute("title"),
             ]
         else:
             self.card["title"] = self.driver.find_element(By.CLASS_NAME, "product-page__title").text
-            self.card["type"] = self.driver.find_elements(By.CLASS_NAME, "breadcrumbs__link")[-2].text
+            try:
+                self.card["type"] = self.driver.find_elements(By.CLASS_NAME, "breadcrumbs__link")[-2].text
+            except Exception:
+                self.card["type"] = ""
             self.card["article"] = self.driver.find_element(By.CLASS_NAME, "product-params__copy").text
-            self.card["file"] = [
-                i.find_element(By.TAG_NAME, "img").get_attribute("src")
-                for i in self.driver.find_elements(By.CLASS_NAME, "slide__content")
-            ]
-            shop = self.driver.find_elements(By.CLASS_NAME, "seller-info__name")[1]
+            for i in self.driver.find_elements(By.CLASS_NAME, "slide__content"):
+                try:
+                    self.card["file"] = self.card["file"] + [i.find_element(By.TAG_NAME, "video").get_attribute("src")]
+                except Exception:
+                    self.card["file"] = self.card["file"] + [i.find_element(By.TAG_NAME, "img").get_attribute("src")]
+            WebDriverWait(self.driver, 2).until(EC.presence_of_element_located((By.CLASS_NAME, "seller-info__name")))
+            shop = self.driver.find_elements(By.CLASS_NAME, "seller-info__name")[0]
             text = str(shop.get_attribute("innerHTML")).strip()
             self.card["shop"] = [
                 "https://www.wildberries.ru" + shop.get_attribute("href"),
@@ -187,5 +197,5 @@ class Driver:
 
 if __name__ == "__main__":
     exemplar = Driver()
-    link = "https://www.ozon.ru/product/botinki-dr-martens-1460-pascal-black-virginia-1232861547/"
+    link = "https://www.wildberries.ru/catalog/170345712/detail.aspx"
     # print(exemplar.find_feedbacks(link))
