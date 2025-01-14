@@ -14,7 +14,6 @@ class Driver:
     def __init__(self) -> None:
         options = webdriver.ChromeOptions()
         options.add_argument("--headless")
-        self.card = {"file": []}
         self.driver = uc.Chrome(options=options)
         self.__ua = UserAgent(browsers="Chrome", os="Windows", platforms="desktop")
         stealth(
@@ -152,6 +151,8 @@ class Driver:
         return feedback, read, name, comment, read_completely, date, rating
 
     def find_feedbacks(self, address: str, count: int = 0) -> dict:
+        self.driver.maximize_window()
+        self.card = {"file": []}
         self.card["link"] = address
         feedback, read, name, comment, read_completely, date, rating = self.__check_link(address)
         # Ожидание прогрузки начала страницы
@@ -197,5 +198,16 @@ class Driver:
 
 if __name__ == "__main__":
     exemplar = Driver()
-    link = "https://www.wildberries.ru/catalog/170345712/detail.aspx"
-    # print(exemplar.find_feedbacks(link))
+    tests = [
+        "https://www.wildberries.ru/catalog/27530246/detail.aspx",
+        "https://www.wildberries.ru/catalog/42680267/detail.aspx",
+    ]
+    # tests.append()
+    while tests:
+        link = tests.pop(0)
+        try:
+            data = exemplar.find_feedbacks(link)
+            # print("passed:", data)
+        except Exception:
+            # print(type(E).__name__ + ":", link)
+            pass
