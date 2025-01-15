@@ -1,0 +1,9 @@
+[tool.black]
+line-length = 120
+target-version = ['py310', 'py311', 'py312']
+exclude = '/.git|/.venv|/__pycache__|/build|/dist|/pyproject.toml'
+[tool.isort]
+profile = "google"
+line_length = 120
+skip = [".git", ".venv", "__pycache__", "build", "dist", "pyproject.toml"]
+py_version = 312
