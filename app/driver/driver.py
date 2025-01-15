@@ -198,10 +198,7 @@ class Driver:
 
 if __name__ == "__main__":
     exemplar = Driver()
-    tests = [
-        "https://www.wildberries.ru/catalog/27530246/detail.aspx",
-        "https://www.wildberries.ru/catalog/42680267/detail.aspx",
-    ]
+    tests = []
     # tests.append()
     while tests:
         link = tests.pop(0)
