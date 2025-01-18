@@ -51,11 +51,11 @@ CHROME_VERSION=${CHROME_VERSION%.*}
 echo "CHROME VERSION: $CHROME_VERSION"
 # Determine latest release of chromedriver
 # Compatibility of Google Chrome and Chromedriver: https://sites.google.com/a/chromium.org/chromedriver/downloads/version-selection
-LATEST_CHROMEDRIVER_VERSION=$(curl "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+# LATEST_CHROMEDRIVER_VERSION=$(curl "https://storage.googleapis.com/chrome-for-testing-public/$CHROME_VERSION/linux64/chrome-linux64.zip")
 
 # Download and unpack latest release of chromedriver
-echo "Downloading chromedriver v$LATEST_CHROMEDRIVER_VERSION..."
-wget "https://chromedriver.storage.googleapis.com/$LATEST_CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
+# echo "Downloading chromedriver v$LATEST_CHROMEDRIVER_VERSION..."
+wget "https://chromedriver.storage.googleapis.com/$CHROME_VERSION/chromedriver_linux64.zip"
 unzip chromedriver_linux64.zip
 rm chromedriver_linux64.zip
 
