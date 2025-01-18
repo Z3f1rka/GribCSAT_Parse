@@ -1,7 +1,8 @@
 #!/usr/bin/sh
-
+# flake8: noqa
 linter=.venv/bin/
-if $linter/flake8
+files=$(git diff --staged --name-only HEAD)
+if $linter/flake8 $files --config=.flake8
 then exit 0
 else exit 1
 fi

@@ -1,7 +1,8 @@
 #!/bin/sh
-
+# flake8: noqa
 venv_path='.venv/Scripts'
-if $venv_path/flake8.exe
+files = $(git diff --staged --name-only HEAD)
+if  $venv_path/flake8.exe $files --config=.flake8
 then exit 0
 else exit 1
 fi
