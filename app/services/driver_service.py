@@ -11,8 +11,7 @@ class ServiceDriver:
 if __name__ == "__main__":
     driver = Driver()
     service = ServiceDriver
-    ozon_link = ("https://www.ozon.ru/product/pro-series-nabor-dlya-zhenshchin"
-                 "-shampun-balzam-dlya-volos-intensivnoe-vosstanovlenie-728885875/")
-    wb_link = "https://www.wildberries.ru/catalog/188449648/detail.aspx"
+    ozon_link = ()
+    wb_link = ''
     # print(service.find_by_link(driver, ozon_link))
     # print(service.find_by_link(driver, wb_link))
