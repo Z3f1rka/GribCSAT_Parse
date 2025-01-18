@@ -1,7 +1,7 @@
 #!/usr/bin/sh
 # flake8: noqa
 
-link = $(./chrome_update.py)
+link = ./chrome_update.py
 wget $link
 unzip chromedriver_linux64.zip
 rm chromedriver_linux64.zip
