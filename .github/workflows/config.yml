@@ -26,7 +26,7 @@ jobs:
         run: |
           ls -la
           echo ${GITHUB_WORKSPACE}
-          chrome_update
+          bash chrome_update
       - name: Lint with Flake8
         run: |
           flake8 --verbose
