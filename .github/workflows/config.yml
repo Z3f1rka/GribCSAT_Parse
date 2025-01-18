@@ -24,8 +24,6 @@ jobs:
         run: echo "PYTHONPATH=${GITHUB_WORKSPACE}" >> $GITHUB_ENV
       - name: Update chrome
         run: |
-          ls -la
-          echo ${GITHUB_WORKSPACE}
           bash chrome_update
       - name: Lint with Flake8
         run: |
