@@ -70,19 +70,22 @@ class Driver:
 
     def __card_info(self, n: bool) -> None:
         if n:
-            self.card["title"] = self.driver.find_elements(By.CLASS_NAME, "l4u_27")[-1].text
-            self.card["type"] = self.driver.find_elements(By.CLASS_NAME, "sd1_10")[-2].text
-            self.card["article"] = self.driver.find_elements(By.CLASS_NAME, "ga121-a2")[3].text[9:]
-            WebDriverWait(self.driver, 2).until(EC.presence_of_element_located((By.TAG_NAME, "video-player")))
-            self.card["file"] = self.card["file"] + [
-                self.driver.find_elements(By.TAG_NAME, "video-player")[0].get_attribute("src"),
-            ]
+            self.card["title"] = self.driver.find_elements(By.CLASS_NAME, "u6l_27")[-1].text
+            self.card["type"] = self.driver.find_elements(By.CLASS_NAME, "sd3_10")[-2].text
+            self.card["article"] = self.driver.find_elements(By.CLASS_NAME, "jp5_27")[0].text[9:]
+            try:
+                WebDriverWait(self.driver, 2).until(EC.presence_of_element_located((By.TAG_NAME, "video-player")))
+                self.card["file"] = self.card["file"] + [
+                    self.driver.find_elements(By.TAG_NAME, "video-player")[0].get_attribute("src"),
+                ]
+            except Exception:
+                pass
             self.card["file"] = self.card["file"] + [
                 i.find_element(By.TAG_NAME, "img").get_attribute("src")
-                for i in self.driver.find_elements(By.CLASS_NAME, "jy0_27")[2:]
+                for i in self.driver.find_elements(By.CLASS_NAME, "yj2_27")[2:]
             ]
-            WebDriverWait(self.driver, 2).until(EC.presence_of_element_located((By.CLASS_NAME, "yj3_27")))
-            shop = self.driver.find_elements(By.CLASS_NAME, "yj3_27")[1]
+            WebDriverWait(self.driver, 2).until(EC.presence_of_element_located((By.CLASS_NAME, "yj5_27")))
+            shop = self.driver.find_elements(By.CLASS_NAME, "yj5_27")[1].find_element(By.TAG_NAME, "a")
             self.card["shop"] = [
                 shop.get_attribute("href"),
                 shop.get_attribute("title"),
@@ -109,15 +112,16 @@ class Driver:
 
     def __check_link(self, address: str):
         if address.split("/")[2] == "www.ozon.ru":  # Подготовка для товара на ozon
-            feedback = "wp4_30"
+            feedback = "s5r_30"
             read_completely = "pw_30"
-            comment = "w6p_30"
-            name = "pt_30"
+            comment = "w1p_30"
+            name = "p2t_30"
             read = True
-            date = "v7p_30"
-            rating = "p8v_30"
+            date = "wp_30"
+            rating = "p0w_30"
             # TODO: звездочки class='a5d24-a a5d24-a0'
             self.driver.get(address)
+            WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.TAG_NAME, "img")))
             # antibot
             c = 0
             try:
@@ -154,9 +158,9 @@ class Driver:
         self.driver.maximize_window()
         self.card = {"file": []}
         self.card["link"] = address
-        feedback, read, name, comment, read_completely, date, rating = self.__check_link(address)
+
         # Ожидание прогрузки начала страницы
-        WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.TAG_NAME, "img")))
+        feedback, read, name, comment, read_completely, date, rating = self.__check_link(address)
 
         # Ожидание прогрузки конца страницы
         self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
@@ -198,13 +202,14 @@ class Driver:
 
 if __name__ == "__main__":
     exemplar = Driver()
-    tests = []
-    # tests.append()
+    tests = [
+        "",
+    ]
     while tests:
         link = tests.pop(0)
         try:
             data = exemplar.find_feedbacks(link)
             # print("passed:", data)
         except Exception:
-            # print(type(E).__name__ + ":", link)
+            # print(type(Exception).__name__ + ":", link)
             pass
