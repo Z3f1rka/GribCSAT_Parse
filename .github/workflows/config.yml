@@ -1,3 +1,4 @@
+# flake8: noqa
 name: DevelopCheck
 on:
   push:
@@ -19,6 +20,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements/dev.txt
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=${GITHUB_WORKSPACE}" >> $GITHUB_ENV
+      - name: Update chrome
+        run: |
+          bash chrome_update
       - name: Lint with Flake8
         run: |
           flake8 --verbose
