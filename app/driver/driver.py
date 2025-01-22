@@ -9,6 +9,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium_stealth import stealth
 import undetected_chromedriver as uc
 
+from app.validation_models import FBLOUTPUT
+
 
 class Driver:
     def __init__(self) -> None:
@@ -55,24 +57,24 @@ class Driver:
                 if len(count_scroll_elements) >= count:
                     break
 
-    def __find_rating(self, n: bool, scroll_elements: list, element: int, rating: str) -> int:
+    def __find_rating(self, n: bool, element, rating: str) -> int:
         if n:
             return len(
                 [
                     i
-                    for i in scroll_elements[element]
+                    for i in element
                     .find_element(By.CLASS_NAME, rating)
                     .find_elements(By.TAG_NAME, "svg")
                     if i.get_attribute("style")[10] == "("
                 ],
             )
-        return int(scroll_elements[element].find_element(By.CLASS_NAME, rating).get_attribute("class")[-1])
+        return int(element.find_element(By.CLASS_NAME, rating).get_attribute("class")[-1])
 
     def __card_info(self, n: bool) -> None:
         if n:
-            self.card["title"] = self.driver.find_elements(By.CLASS_NAME, "u6l_27")[-1].text
+            self.card["title"] = self.driver.find_elements(By.CLASS_NAME, "t6l_27")[-1].text
             self.card["type"] = self.driver.find_elements(By.CLASS_NAME, "sd3_10")[-2].text
-            self.card["article"] = self.driver.find_elements(By.CLASS_NAME, "jp5_27")[0].text[9:]
+            self.card["article"] = self.driver.find_elements(By.CLASS_NAME, "ga121-a2")[0].text[9:]
             try:
                 WebDriverWait(self.driver, 2).until(EC.presence_of_element_located((By.TAG_NAME, "video-player")))
                 self.card["file"] = self.card["file"] + [
@@ -84,8 +86,8 @@ class Driver:
                 i.find_element(By.TAG_NAME, "img").get_attribute("src")
                 for i in self.driver.find_elements(By.CLASS_NAME, "yj2_27")[2:]
             ]
-            WebDriverWait(self.driver, 2).until(EC.presence_of_element_located((By.CLASS_NAME, "yj5_27")))
-            shop = self.driver.find_elements(By.CLASS_NAME, "yj5_27")[1].find_element(By.TAG_NAME, "a")
+            WebDriverWait(self.driver, 2).until(EC.presence_of_element_located((By.CLASS_NAME, "jx6_27")))
+            shop = self.driver.find_elements(By.CLASS_NAME, "jx6_27")[1]
             self.card["shop"] = [
                 shop.get_attribute("href"),
                 shop.get_attribute("title"),
@@ -154,7 +156,7 @@ class Driver:
             time.sleep(0.02)
         return feedback, read, name, comment, read_completely, date, rating
 
-    def find_feedbacks(self, address: str, count: int = 0) -> dict:
+    def find_feedbacks(self, address: str, count: int = 0) -> FBLOUTPUT:
         self.driver.maximize_window()
         self.card = {"file": []}
         self.card["link"] = address
@@ -176,24 +178,24 @@ class Driver:
             scroll_elements = [i for i in self.driver.find_elements(By.CLASS_NAME, feedback)]
             if count:
                 scroll_elements = scroll_elements[:count]
-            box = {}
-            for element in range(len(scroll_elements)):
+            box = []
+            for element in scroll_elements:
                 self.driver.execute_script(
                     'arguments[0].scrollIntoView({block: "center", inline: "center"});',
-                    scroll_elements[element],
+                    element,
                 )
-                rats = self.__find_rating(read, scroll_elements, element, rating)
-                box[element] = (
-                    scroll_elements[element].find_element(By.CLASS_NAME, name).text,
-                    scroll_elements[element].find_element(By.CLASS_NAME, comment).text,
-                    [i for i in scroll_elements[element].find_elements(By.CLASS_NAME, date)][-1].text,
+                rats = self.__find_rating(read, element, rating)
+                box.append((
+                    element.find_element(By.CLASS_NAME, name).text,
+                    element.find_element(By.CLASS_NAME, comment).text,
+                    [i for i in element.find_elements(By.CLASS_NAME, date)][-1].text,
                     rats,
-                )
+                ))
                 # i : (name, feedback)
-
+            if len(scroll_elements) != len(box):
+                raise Exception
         except Exception:
             pass
-
         self.card["feedbacks"] = box
         data = json.dumps(self.card)
         data = json.loads(data)
@@ -207,9 +209,6 @@ if __name__ == "__main__":
     ]
     while tests:
         link = tests.pop(0)
-        try:
-            data = exemplar.find_feedbacks(link)
-            # print("passed:", data)
-        except Exception:
-            # print(type(Exception).__name__ + ":", link)
-            pass
+        data = exemplar.find_feedbacks(link)
+        # print("passed:", data)
+        pass
