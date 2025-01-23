@@ -17,3 +17,4 @@ class FBLOUTPUT(Product):
 
 class FBLINPUT(BaseModel):
     link: str
+    count: int | None = None

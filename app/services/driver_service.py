@@ -1,4 +1,4 @@
-from urllib import parse
+from urllib.parse import unquote_plus
 
 from app.driver.driver import Driver
 from app.validation_models import FBLOUTPUT
@@ -6,7 +6,7 @@ from app.validation_models import FBLOUTPUT
 
 class ServiceDriver:
     def find_by_link(driver: Driver, address: str, amount_feedbacks: int = 0) -> FBLOUTPUT:
-        __return = driver.find_feedbacks(parse.unquote_plus(address), amount_feedbacks)
+        __return = driver.find_feedbacks(unquote_plus(address), amount_feedbacks)
 
         return FBLOUTPUT(file=__return["file"],
                          link=__return["link"],
